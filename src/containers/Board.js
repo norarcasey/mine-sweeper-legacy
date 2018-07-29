@@ -95,11 +95,15 @@ const validDiffs = (id) => {
   // Left side
   if([1,10,19,28,37, 46, 55, 64, 73].includes(id)) {
     diffs[3] = null;
+    diffs[0] = null;
+    diffs[5] = null;
   }
 
   // Right Side
   if(id % 9 === 0) {
+    diffs[2] = null;
     diffs[4] = null;
+    diffs[7] = null;
   }
 
   return diffs.filter(d => d !== null);
