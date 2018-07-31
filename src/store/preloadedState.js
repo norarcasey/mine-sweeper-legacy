@@ -3,7 +3,7 @@ const mineLocations = {};
 while(Object.keys(mineLocations).length < 10) {
   let random = ~~(82 * (Math.random()));
 
-  if(mineLocations[random]) continue;
+  if(random === 0 || mineLocations[random]) continue;
 
   mineLocations[random] = true;
 }
