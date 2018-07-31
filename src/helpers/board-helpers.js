@@ -22,7 +22,10 @@ export const revealAdjacent = (id, diffs, board) => {
 
 const revealStyle = (id, total = 0) => {
   const el = document.getElementById(`CellId-${id}`);
-  el.style.backgroundColor = '#fff';
+
+  if(el.className.indexOf(' revealed') < 0)
+    el.className += ' revealed';
+
   if(total)
     el.textContent = total;
 }
