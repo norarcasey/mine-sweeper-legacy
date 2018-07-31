@@ -34,6 +34,9 @@ class Board extends Component {
           id = Number(el.getAttribute('data-id')),
           idObj = {};
 
+    if(el.className.indexOf('revealed') > -1)
+      return;
+
     if(el.className.indexOf('flag') > -1) {
       idObj[id] = false;
       el.className = el.className.replace(' flag', '');

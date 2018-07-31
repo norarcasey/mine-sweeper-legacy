@@ -17,6 +17,10 @@
   width: 30px;
 }
 
+.revealed {
+  background-color: #fff;
+}
+
 .flag {
   background-color: blue;
 }
