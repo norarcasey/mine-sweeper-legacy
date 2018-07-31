@@ -72,6 +72,8 @@ class Board extends Component {
   }
 
   guess = (e) => {
+    if(e.target.className.indexOf('revealed') > -1) return;
+
     const board = this.props.board,
           id = Number(e.target.getAttribute('data-id')),
           type = e.target.attributes.getNamedItem('data-type').value;
