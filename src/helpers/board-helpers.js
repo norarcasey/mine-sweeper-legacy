@@ -20,14 +20,16 @@ export const revealAdjacent = (id, diffs, board) => {
   }
 }
 
-const revealStyle = (id, total = 0) => {
+export const revealStyle = (id, total = 0) => {
   const el = document.getElementById(`CellId-${id}`);
 
   if(el.className.indexOf(' revealed') < 0)
     el.className += ' revealed';
 
-  if(total)
+  if(total) {
+    el.className += ` adj-${total}`;
     el.textContent = total;
+  }
 }
 
 // CHECK N , NE, E, SE, S, SW, W for bombs

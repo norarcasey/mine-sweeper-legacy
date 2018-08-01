@@ -5,22 +5,42 @@
 .cells {
   display: flex;
   flex-wrap: wrap;
-  width: 280px;
+  width: 290px;
+  padding: 10px;
+  background: gray;
 }
 
 .cell {
-  background-color: darkgray;
-  border: ridge 4px gray;
+  background-color: #bdbdbd;
+  border: ridge 4px darkgray;
+  border-top: ridge 4px #fff;
+  border-left: ridge 4px #fff;
   cursor: pointer;
   height: 30px;
   text-align: center;
   width: 30px;
+  font-weight: bold;
+  font-family: 'fantasy';
+  padding-top: 2px;
 }
 
 .revealed {
-  background-color: #fff;
+  background-color: #bdbdbd;
+  border: solid 1px gray;
 }
 
-.flag {
-  background-color: blue;
+.adj-1 {
+  color: #0b24fb;
+}
+
+.adj-2 {
+  color: #248226;
+}
+
+.adj-3 {
+  color: #fb0f1d;
+}
+
+.fas.fa-bomb {
+  display: none;
 }
