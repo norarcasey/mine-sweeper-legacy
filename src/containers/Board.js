@@ -15,10 +15,6 @@ class Board extends Component {
     this.flag = this.flag.bind(this);
   }
 
-  componentWillUnmount() {
-    this.removeClickListener();
-  }
-
   flag(e) {
     e.preventDefault();
 
