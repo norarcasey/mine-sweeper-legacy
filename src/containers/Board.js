@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {revealAdjacent, findAdjacentMines, validDiffs} from '../helpers/board-helpers';
+import {revealAdjacent, findAdjacentMines, validDiffs, revealStyle} from '../helpers/board-helpers';
 
 class Board extends Component {
 
@@ -22,15 +22,13 @@ class Board extends Component {
   }
 
   componentWillUnmount() {
-    // Left click
-    document.getElementById('board').removeEventListener('click', this.guess, false);
-    // Right click
-    document.getElementById('board').removeEventListener('contextmenu', this.flag, false);
+    this.removeClickListener();
   }
 
   flag(e) {
     e.preventDefault();
-    const el = e.target,
+
+    const el = e.target.nodeName === 'I' ? e.target.parentNode : e.target,
           id = Number(el.getAttribute('data-id')),
           idObj = {};
 
@@ -40,9 +38,18 @@ class Board extends Component {
     if(el.className.indexOf('flag') > -1) {
       idObj[id] = false;
       el.className = el.className.replace(' flag', '');
+      for(let i=0; i<el.childNodes.length; i++) {
+        if(el.childNodes[i].className.indexOf('fa-flag') > -1) {
+          el.childNodes[i].remove();
+          break;
+        }
+      }
     } else {
       idObj[id] = true;
       el.className += ' flag';
+      var flagNode = document.createElement("I");
+      flagNode.className = 'far fa-flag';
+      el.appendChild(flagNode);
     }
 
     this.setState({flagged: {...this.state.flagged, ...idObj}});
@@ -63,30 +70,38 @@ class Board extends Component {
       }
 
       if(isWinner) {
+        this.removeClickListener();
         console.log("You WIN!");
         const blanks = document.querySelectorAll('.cells .cell.blank');
-        blanks.forEach(cell => { cell.style.backgroundColor = '#ff'; });
+        blanks.forEach(cell => { revealStyle(Number(cell.getAttribute('data-id'))) });
       }
 
     }
   }
 
   guess = (e) => {
-    if(e.target.className.indexOf('revealed') > -1) return;
+    const el = e.target;
+    if(el.id === 'board' || el.className.indexOf('revealed') > -1) return;
 
     const board = this.props.board,
-          id = Number(e.target.getAttribute('data-id')),
-          type = e.target.attributes.getNamedItem('data-type').value;
+          id = Number(el.getAttribute('data-id')),
+          type = el.attributes.getNamedItem('data-type').value;
 
     if(this.state.flagged[id]) {
       return;
     }
 
     if(type === 'mine') {
+      this.removeClickListener();
       console.log('GAME OVER!');
-      document.querySelectorAll('.cells .cell').forEach(cell => cell.style.backgroundColor = '#fff');
-      const mines = document.querySelectorAll('.cells .cell.mine');
-      mines.forEach(cell => {cell.style.backgroundColor = 'red'; cell.style.color = '#fff'});
+      const flags = document.querySelectorAll('.fa-flag');
+      flags.forEach(f => f.style.display = 'none');
+      const mineCells = document.querySelectorAll('.cells .cell.mine');
+      mineCells.forEach(cell => {cell.className += ' revealed';});
+      const mines = document.querySelectorAll('.cells .cell.mine .fa-bomb');
+      e.target.style.backgroundColor = 'red';
+
+      mines.forEach(cell => {cell.style.display = 'inline';});
       return;
     }
 
@@ -94,9 +109,18 @@ class Board extends Component {
 
     if(mineCount === 0) {
       // find and activate all the adjacent elements
+      revealStyle(id);
       revealAdjacent(id, validDiffs(id), board);
     }
   };
+
+  removeClickListener = () => {
+    // Left click
+    document.getElementById('board').removeEventListener('click', this.guess, false);
+    // Right click
+    document.getElementById('board').removeEventListener('contextmenu', this.flag, false);
+  };
+
 
   render() {
     const board = this.props.board;
@@ -110,15 +134,13 @@ class Board extends Component {
                         data-id={cell.id}
                         className={`cell ${cell.type}`}
                         data-type={cell.type}
-                    ></div>
+                    >{cell.type === 'mine' ? <i className="fas fa-bomb"></i> : ''}</div>
           })}
         </div>
       </div>
     );
   }
 }
-
-
 
 const mapStateToProps = state => ({
   board: state.board,
