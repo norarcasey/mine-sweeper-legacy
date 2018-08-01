@@ -2,9 +2,9 @@ export const revealAdjacent = (id, diffs, board) => {
 
   while(diffs.length > 0) {
 
-    let diffId = id+diffs.shift();
-    console.log(diffId);
-    let mineCount = findAdjacentMines(diffId, board);
+    let diffId = id+diffs.shift(),
+        mineCount = findAdjacentMines(diffId, board);
+
     if(mineCount > 0) continue;
 
     revealStyle(diffId);
