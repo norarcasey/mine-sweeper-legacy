@@ -44,3 +44,12 @@
 .fas.fa-bomb {
   display: none;
 }
+
+.scoreboard {
+  width: 290px;
+  padding: 10px;
+  background-color: gray;
+  border: ridge 4px lightgray;
+  display: flex;
+  justify-content: space-around;
+}
