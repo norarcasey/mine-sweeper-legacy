@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {revealAdjacent, findAdjacentMines, validDiffs, revealStyle} from '../helpers/board-helpers';
+import Result from '../components/result';
 
 class Board extends Component {
 
@@ -9,7 +10,6 @@ class Board extends Component {
 
     this.state = {
       flagged: {},
-      isGameOver: false,
       time: 0,
       timer: null
     }
@@ -21,7 +21,7 @@ class Board extends Component {
   flag(e) {
     e.preventDefault();
 
-    if(this.state.isGameOver) return;
+    if(this.props.isGameOver) return;
 
     const el = e.target.nodeName === 'I' ? e.target.parentNode : e.target,
           id = Number(el.getAttribute('data-id')),
@@ -66,9 +66,9 @@ class Board extends Component {
 
       if(isWinner) {
         console.log("You WIN!");
-        console.log(self.state.timer);
         clearInterval(self.state.timer);
-        this.setState({isGameOver: true});
+        this.props.dispatch({type: 'SET_IS_GAME_OVER', value: true});
+        this.props.dispatch({type: 'SET_IS_WINNER', value: true});
         const blanks = document.querySelectorAll('.cells .cell.blank');
         blanks.forEach(cell => { revealStyle(Number(cell.getAttribute('data-id'))) });
       }
@@ -76,20 +76,16 @@ class Board extends Component {
   }
 
   guess = (e) => {
-    const self = this;
-    console.log(self);
-    if(this.state.isGameOver) return;
+    if(this.props.isGameOver) return;
 
     const el = e.target.nodeName === 'I' ? e.target.parentNode : e.target;
-    console.log(el.className.indexOf('cell'));
     if(el.className.indexOf('cell') < 0 || el.className.indexOf('revealed') > -1) return;
 
-    if(!self.state.time) {
+    if(!this.state.time) {
       let timer = setInterval(this.tick, 1000);
       this.setState({timer});
     }
 
-    console.log(el);
     const board = this.props.board,
           id = Number(el.getAttribute('data-id')),
           type = el.attributes.getNamedItem('data-type').value;
@@ -100,7 +96,8 @@ class Board extends Component {
 
     if(type === 'mine') {
       console.log('GAME OVER!');
-      this.setState({isGameOver: true});
+      this.props.dispatch({type: 'SET_IS_GAME_OVER', value: true});
+      this.props.dispatch({type: 'SET_IS_WINNER', value: false});
       clearInterval(this.state.timer);
 
       const flags = document.querySelectorAll('.fa-flag');
@@ -152,6 +149,8 @@ class Board extends Component {
                     >{cell.type === 'mine' ? <i className="fas fa-bomb"></i> : ''}</div>
           })}
         </div>
+
+        <Result />
       </div>
     );
   }
@@ -159,7 +158,8 @@ class Board extends Component {
 
 const mapStateToProps = state => ({
   board: state.board,
-  mines: state.mines
+  mines: state.mines,
+  isGameOver: state.isGameOver
 });
 
 export default connect(mapStateToProps)(Board);

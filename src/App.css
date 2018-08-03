@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 .cells {
@@ -52,4 +53,18 @@
   border: ridge 4px lightgray;
   display: flex;
   justify-content: space-around;
+}
+
+.results {
+  text-align: center;
+  width: 290px;
+  font-size: 24px;
+}
+
+.results.winner {
+  color: green;
+}
+
+.results.loser {
+  color: red;
 }
