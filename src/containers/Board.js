@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {revealAdjacent, findAdjacentMines, validDiffs, revealStyle} from '../helpers/board-helpers';
 import Result from '../components/result';
+import ScoreBoard from '../components/scoreboard';
 import {toggleFlag} from '../helpers/flag-helpers';
 
 class Board extends Component {
@@ -107,14 +108,7 @@ class Board extends Component {
     return(
       <div id="board" onClick={this.guess} onContextMenu={this.flag}>
 
-        <div className="scoreboard">
-          <div className="minesLeft">
-            {this.props.mines.length - Object.keys(this.state.flagged).length}
-          </div>
-          <div className="timer">
-            {this.state.time}
-          </div>
-        </div>
+        <ScoreBoard mines={this.props.mines} flaggedMines={this.state.flagged} time={this.state.time} />
 
         <div className="cells">
           {board.map((cell, idx) => {
