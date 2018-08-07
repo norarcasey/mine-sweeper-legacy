@@ -15,11 +15,10 @@ class Board extends Component {
       timer: null
     }
 
-    this.flag = this.flag.bind(this);
     this.tick = this.tick.bind(this);
   }
 
-  flag(e) {
+  flag = (e) => {
     e.preventDefault();
 
     if(this.props.isGameOver) return;
@@ -30,7 +29,7 @@ class Board extends Component {
     this.setState({flagged: {...this.state.flagged, ...idObj}}, this.checkForWinner);
   }
 
-  checkForWinner() {
+  checkForWinner = () => {
     let self = this;
     const flaggedMines = Object.keys(self.state.flagged).filter(k => self.state.flagged[k] === true);
 
@@ -45,7 +44,7 @@ class Board extends Component {
 
       if(isWinner) {
         console.log("You WIN!");
-        clearInterval(self.state.timer);
+        clearInterval(this.state.timer);
         this.props.dispatch({type: 'SET_IS_GAME_OVER', value: true});
         this.props.dispatch({type: 'SET_IS_WINNER', value: true});
         const blanks = document.querySelectorAll('.cells .cell.blank');
@@ -58,7 +57,7 @@ class Board extends Component {
     if(this.props.isGameOver) return;
 
     const el = e.target.nodeName === 'I' ? e.target.parentNode : e.target;
-    if(el.className.indexOf('cell') < 0 || el.className.indexOf('revealed') > -1) return;
+    if(el.className.indexOf('cell ') < 0 || el.className.indexOf('revealed') > -1) return;
 
     if(!this.state.time) {
       let timer = setInterval(this.tick, 1000);
