@@ -100,7 +100,8 @@ class Board extends Component {
   };
 
   tick() {
-    this.setState({time: this.state.time + 1});
+    if(!this.props.isGameOver)
+      this.setState({time: this.state.time + 1});
   }
 
   render() {
