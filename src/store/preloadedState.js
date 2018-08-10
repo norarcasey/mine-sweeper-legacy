@@ -15,7 +15,5 @@ for(let i = 1; i <= 81; i++) {
 
 export const PreloadedState = {
   mines: Object.keys(mineLocations),
-  board: board,
-  isGameOver: false,
-  isWinner: null
+  board: board
 }

@@ -62,6 +62,7 @@ class Board extends Component {
     const el = e.target.nodeName === 'I' ? e.target.parentNode : e.target;
     if(el.className.indexOf('cell ') < 0 || el.className.indexOf('revealed') > -1) return;
 
+    // Start the timer
     if(this.state.timer === null) {
       let timer = setInterval(this.tick, 1000);
       this.setState({timer});

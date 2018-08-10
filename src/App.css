@@ -68,3 +68,17 @@
 .results.loser {
   color: red;
 }
+
+
+#board.loser .fa-flag {
+  display: none;
+}
+
+#board.loser .cells .cell.mine {
+  background-color: #bdbdbd;
+  border: solid 1px gray;
+}
+
+#board.loser .cells .cell.mine .fa-bomb {
+  display: inline;
+}
