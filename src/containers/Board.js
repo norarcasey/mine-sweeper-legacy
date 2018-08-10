@@ -13,7 +13,9 @@ class Board extends Component {
     this.state = {
       flagged: {},
       time: 0,
-      timer: null
+      timer: null,
+      isGameOver: false,
+      isWinner: null
     }
 
     this.tick = this.tick.bind(this);
@@ -22,7 +24,7 @@ class Board extends Component {
   flag = (e) => {
     e.preventDefault();
 
-    if(this.props.isGameOver) return;
+    if(this.state.isGameOver) return;
 
     const el = e.target.nodeName === 'I' ? e.target.parentNode : e.target,
           idObj = toggleFlag(el);
@@ -46,8 +48,7 @@ class Board extends Component {
       if(isWinner) {
         console.log("You WIN!");
         clearInterval(this.state.timer);
-        this.props.dispatch({type: 'SET_IS_GAME_OVER', value: true});
-        this.props.dispatch({type: 'SET_IS_WINNER', value: true});
+        this.setState({isGameOver: true, isWinner: true});
         const blanks = document.querySelectorAll('.cells .cell.blank');
         blanks.forEach(cell => { revealStyle(Number(cell.getAttribute('data-id'))) });
       }
@@ -55,12 +56,12 @@ class Board extends Component {
   }
 
   guess = (e) => {
-    if(this.props.isGameOver) return;
+    if(this.state.isGameOver) return;
 
     const el = e.target.nodeName === 'I' ? e.target.parentNode : e.target;
     if(el.className.indexOf('cell ') < 0 || el.className.indexOf('revealed') > -1) return;
 
-    if(!this.state.time) {
+    if(this.state.timer === null) {
       let timer = setInterval(this.tick, 1000);
       this.setState({timer});
     }
@@ -75,8 +76,7 @@ class Board extends Component {
 
     if(type === 'mine') {
       console.log('GAME OVER!');
-      this.props.dispatch({type: 'SET_IS_GAME_OVER', value: true});
-      this.props.dispatch({type: 'SET_IS_WINNER', value: false});
+      this.setState({isGameOver: true, isWinner: false});
       clearInterval(this.state.timer);
 
       const flags = document.querySelectorAll('.fa-flag');
@@ -100,7 +100,7 @@ class Board extends Component {
   };
 
   tick() {
-    if(!this.props.isGameOver)
+    if(!this.state.isGameOver)
       this.setState({time: this.state.time + 1});
   }
 
@@ -123,7 +123,7 @@ class Board extends Component {
           })}
         </div>
 
-        <Result />
+        <Result isGameOver={this.state.isGameOver} isWinner={this.state.isWinner} />
       </div>
     );
   }
@@ -131,8 +131,7 @@ class Board extends Component {
 
 const mapStateToProps = state => ({
   board: state.board,
-  mines: state.mines,
-  isGameOver: state.isGameOver
+  mines: state.mines
 });
 
 export default connect(mapStateToProps)(Board);

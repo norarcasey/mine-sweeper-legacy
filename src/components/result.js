@@ -1,5 +1,4 @@
 import React from 'react';
-import {connect} from 'react-redux';
 
 const Result = ({isGameOver, isWinner}) => {
 
@@ -11,9 +10,4 @@ const Result = ({isGameOver, isWinner}) => {
   );
 }
 
-const mapStateToProps = state => ({
-    isGameOver: state.isGameOver,
-    isWinner: state.isWinner
-});
-
-export default connect(mapStateToProps)(Result);
+export default Result;
