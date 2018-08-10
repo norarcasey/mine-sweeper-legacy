@@ -34,14 +34,13 @@ class Board extends Component {
   }
 
   checkForWinner = () => {
-    let self = this;
-    const flaggedMines = Object.keys(self.state.flagged).filter(k => self.state.flagged[k] === true);
+    const flaggedMines = Object.keys(this.state.flagged).filter(k => this.state.flagged[k] === true);
 
-    if(self.props.mines.length === flaggedMines.length) {
+    if(this.props.mines.length === flaggedMines.length) {
       console.log("All the mines flagged?");
       let isWinner = true;
       for(let i=0; i < flaggedMines.length; i++) {
-        if(flaggedMines[i] !== self.props.mines[i]) {
+        if(flaggedMines[i] !== this.props.mines[i]) {
           isWinner = false;
         }
       }
@@ -103,7 +102,7 @@ class Board extends Component {
     return(
       <div id="board" onClick={this.guess} onContextMenu={this.flag}>
 
-        <ScoreBoard mines={this.props.mines} flaggedMines={this.state.flagged} time={this.state.time} />
+        <ScoreBoard mines={this.props.mines} flagged={this.state.flagged} time={this.state.time} />
 
         <div className="cells">
           {board.map((cell, idx) => {
