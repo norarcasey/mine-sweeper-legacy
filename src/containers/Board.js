@@ -4,6 +4,7 @@ import {revealAdjacent, findAdjacentMines, validDiffs, revealStyle} from '../hel
 import Result from '../components/result';
 import ScoreBoard from '../components/scoreboard';
 import {toggleFlag} from '../helpers/flag-helpers';
+import {displayLoser} from '../helpers/board-display-helpers';
 
 class Board extends Component {
 
@@ -78,15 +79,7 @@ class Board extends Component {
       console.log('GAME OVER!');
       this.setState({isGameOver: true, isWinner: false});
       clearInterval(this.state.timer);
-
-      const flags = document.querySelectorAll('.fa-flag');
-      flags.forEach(f => f.style.display = 'none');
-      const mineCells = document.querySelectorAll('.cells .cell.mine');
-      mineCells.forEach(cell => {cell.className += ' revealed';});
-      const mines = document.querySelectorAll('.cells .cell.mine .fa-bomb');
-      e.target.style.backgroundColor = 'red';
-
-      mines.forEach(cell => {cell.style.display = 'inline';});
+      displayLoser(e.target);
       return;
     }
 
